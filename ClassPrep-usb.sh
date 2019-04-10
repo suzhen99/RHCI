@@ -22,7 +22,8 @@ function netdisk {
   fi
   # network state
   ping -c 1 ${SI} &>/dev/null || echo "INFO\tnetwork is disconnect" && exit 1
-  mount -o username=$UN,password=$UP,nounix,sec=ntlmssp,noserverino,vers=2.0 //$SI/$SS /mnt && echo -e "mounted sucessfully\033[0m" ;;
+  mount -o username=$UN,password=$UP,nounix,sec=ntlmssp,noserverino,vers=2.0 //$SI/$SS /mnt \
+  && echo -e "mounted sucessfully\033[0m"
 }
 
 function selectcn {
@@ -38,10 +39,10 @@ function selectcn {
 }
 
 function ufdisk {
-  if lsblk -S | awk '/usb/ {print $1}'; then
+  if ! lsblk -S | awk '/usb/ {print $1}'; then
     echo -e " INFO\tUsb disk"
     UD=$(lsblk -S | awk '/usb/ {print $1}')
-  elif lsblk -S | awk '/disk/ {print $1}' | grep -v sda; then
+  elif ! lsblk -S | awk '/disk/ {print $1}' | grep -v sda; then
     echo -e " INFO\tSecond disk"
     UD=$(lsblk -S | awk '/disk/ {print $1}' | grep -v sda)
   else
