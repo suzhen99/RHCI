@@ -96,10 +96,8 @@ function selectcn {
 function ufdisk {
   pad ". Disk confirm"
   if ! lsblk -S | awk '/usb/ {print $1}'; then
-    echo -e "\033[36mINFO\tUsb disk\033[0m"
     UD=$(lsblk -S | awk '/usb/ {print $1}')
   elif [ $(lsblk -S | awk '/disk/ {print $1}' | wc -l) -ge 2 ]; then
-    echo -e "\033[36mINFO\tSecond disk\033[0m"
     UD=$(lsblk -S | awk '/disk/ {print $1}' | grep -v sda)
   else
     print_FAIL
