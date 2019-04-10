@@ -107,10 +107,10 @@ SI=172.25.0.89
 SS=Instructor
 # User Name
 UN=sven
-# User Pass
-read -p "Please input your password: " UP
 
 ufdisk
+# User Pass
+read -p "Please input your password: " UP
 netdisk
 selectcn
 uformat
