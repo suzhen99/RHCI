@@ -1,5 +1,8 @@
 #!/bin/bash
 
+Course_Name=CL210
+Course_Dir="/Volumes/DATA 1/INSTRUCTOR"
+
 # Install wget using BREW
 brew install wget
 
@@ -20,12 +23,9 @@ rpm2cpio icrm-1.0.7-2.el7.noarch.rpm | cpio -dium
 # Prepare bin
 sudo ln -s /usr/bin/python2.7 /usr/bin/python2
 sudo cp -r usr/lib/python2.7/site-packages/icrm /usr/lib/python2.7
-sudo cp ~/usr/bin/icrm /usr/local/bin
-sudo cp usr/share/bash-completion/completions/icrm /usr/share/bash-completion/completions
+sudo cp usr/bin/icrm /usr/local/bin
 
 # Prepare config
-Course_Name=CL210
-Course_Dir="/Volumes/DATA 1/INSTRUCTOR"
 icrm help >/dev/null
 Course_DN=$(ls -d "${Course_Dir}"/${Course_Name}*)
 sed -ie "/repository/s|:.*|: ${Course_DN}|" ~/.icrm/config.yml
