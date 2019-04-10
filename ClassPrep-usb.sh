@@ -100,6 +100,7 @@ function rhtu {
 
 function selectcn {
   CNP=$(ls -d /mnt/[CDR]* | awk -F / '{print $NF}' | awk -F - '{print $1"-"$2}')
+  echo
   echo -e '\033[36mPlease input the first number:\033[0m'
   select CN in $CNP EXIT
   do
