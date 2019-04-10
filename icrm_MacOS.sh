@@ -23,6 +23,7 @@ rpm2cpio icrm-1.0.7-2.el7.noarch.rpm | cpio -dium
 # Prepare bin
 sudo ln -s /usr/bin/python2.7 /usr/bin/python2
 sudo cp -r usr/lib/python2.7/site-packages/icrm /usr/lib/python2.7
+sudo sed -ie '/setterm/s|".*"|"echo"|' /usr/lib/python2.7/icrm/__init__.py
 sudo cp usr/bin/icrm /usr/local/bin
 
 # Prepare config
