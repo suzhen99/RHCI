@@ -21,7 +21,7 @@ function netdisk {
     umount /mnt 2>/dev/null
   fi
   # network state
-  ping -c 1 ${SI} &>/dev/null || echo "INFO\tnetwork is disconnect" && exit 1
+  ping -c 1 ${SI} &>/dev/null || echo "INFO\tnetwork is disconnect"
   mount -o username=$UN,password=$UP,nounix,sec=ntlmssp,noserverino,vers=2.0 //$SI/$SS /mnt \
   && echo -e "mounted sucessfully\033[0m"
 }
@@ -29,7 +29,7 @@ function netdisk {
 function selectcn {
   CNP=$(ls -d /mnt/[CDR]* | awk -F / '{print $NF}' | awk -F - '{print $1"-"$2}')
   echo -e '\033[36mPlease input the first number:\033[0m'
-  select CN in "$CNP" EXIT
+  select CN in $CNP EXIT
   do
     break
   done
