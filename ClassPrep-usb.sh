@@ -42,7 +42,7 @@ function ufdisk {
   if ! lsblk -S | awk '/usb/ {print $1}'; then
     echo -e " INFO\tUsb disk"
     UD=$(lsblk -S | awk '/usb/ {print $1}')
-  elif ! lsblk -S | awk '/disk/ {print $1}' | grep -v sda; then
+  elif [ $(lsblk -S | awk '/disk/ {print $1}' | wc -l) -ge 2 ]; then
     echo -e " INFO\tSecond disk"
     UD=$(lsblk -S | awk '/disk/ {print $1}' | grep -v sda)
   else
