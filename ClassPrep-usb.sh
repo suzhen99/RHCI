@@ -46,15 +46,23 @@ function selectcn {
 }
 
 function ufdisk {
-  UD=$(lsblk -S | awk '/usb/ {print $1}')
-  if [ -z ${UD} ];  then
-    UD=$(lsblk -S | awk '/disk/ {print $1}' | tail -n 1)
+  if lsblk -S | awk '/usb/ {print $1}'; then
+    echo -e " INFO\tUsb disk"
+    UD=$(lsblk -S | awk '/usb/ {print $1}')
+  elif lsblk -S | awk '/disk/ {print $1}' | grep -v sda; then
+    echo -e " INFO\tSecond disk"
+    UD=$(lsblk -S | awk '/disk/ {print $1}' | grep -v sda)
+  else
+    echo -e " INFO\tPlease insert Usb disk or Second disk"
+    exit 2
   fi
+  # umount /tmp/usb
   for i in {1..4}; do
     if lsblk | grep ${UD}{i}.*part.*\ /tmp; then
       umount /dev/${UD}{i}
     fi
   done
+  # fdisk
   echo -e "d\nd\nd\nd\n\nn\n\n\n\n\nw\n" | fdisk /dev/${UD} >/dev/null
   if [ -e /dev/${UD}1 ]; then
     echo -e "\033[36mINFO\t--UD:\t/dev/${UD}1\033[0m"
