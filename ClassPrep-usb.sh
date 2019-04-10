@@ -15,14 +15,6 @@
 #   * Mon Apr 1 2019 Alex Su <suzhen@easthome.com>
 #   - initial code
 
-# Server Ip
-SI=172.25.0.89
-# Server Share
-SS=Instructor
-# User Name
-UN=sven
-# User Pass
-read -p "Please input your password: " UP
 
 function netdisk {
   if findmnt /mnt >/dev/null; then
@@ -109,6 +101,15 @@ function env_clear {
 }
 
 # Main area
+# Server Ip
+SI=172.25.0.89
+# Server Share
+SS=Instructor
+# User Name
+UN=sven
+# User Pass
+read -p "Please input your password: " UP
+
 ufdisk
 netdisk
 selectcn
