@@ -62,16 +62,19 @@ function print_FAIL() {
   echo -e "\\033[1;31mFAIL\\033[0;39m"
 }
 
+function nets {
+  pad ". network state"
+  if ping -c 1 ${SI} &>/dev/null; then
+    print_SUCCESS
+  else
+    print_FAIL
+    exit
+  fi
+}
+
 function netdisk {
   if findmnt /mnt >/dev/null; then
     umount /mnt 2>/dev/null
-  fi
-  
-  pad ". network state"
-  if ! ping -c 1 ${SI} &>/dev/null; then
-    print_FAIL
-  else
-    print_SUCCESS
   fi
   
   pad ". mounting //$SI/$SS /mnt"
@@ -80,13 +83,18 @@ function netdisk {
     print_SUCCESS
   else
     print_FAIL
+    exit
   fi
-  
+}
+
+function rhtu {
+  pad ". rht-usb"
   RU=$(ls /mnt/RHCI*/rht-usb*)
   if [ ! -z "${RU}" ]; then
     print_SUCCESS
   else
     print_FAIL
+    exit
   fi
 }
 
@@ -113,7 +121,7 @@ function ufdisk {
   else
     print_FAIL
     echo -e "\033[36mINFO\tPlease insert Usb disk or Second disk\033[0m"
-    exit 2
+    exit
   fi
   
   # umount /tmp/usb
@@ -129,6 +137,7 @@ function ufdisk {
     print_SUCCESS
   else
     print_FAIL
+    exit
   fi
 }
 
@@ -178,9 +187,13 @@ SS=Instructor
 UN=sven
 
 ufdisk
+nets
 # User Pass
+echo -e '\033[36m'
 read -p "Please input your password: " UP
+echo -e '\033[0m'
 netdisk
+rhtu
 selectcn
 uformat
 rhci
