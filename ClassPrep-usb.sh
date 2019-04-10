@@ -24,6 +24,8 @@ function netdisk {
   ping -c 1 ${SI} &>/dev/null || echo "INFO\tnetwork is disconnect"
   mount -o username=$UN,password=$UP,nounix,sec=ntlmssp,noserverino,vers=2.0 //$SI/$SS /mnt \
   && echo -e "mounted sucessfully\033[0m"
+  RU=$(ls /mnt/RHCI*/rht-usb*)
+  echo -e "\033[36mINFO\t--RU:\t${RU}\033[0m"
 }
 
 function selectcn {
@@ -63,8 +65,6 @@ function ufdisk {
 }
 
 function rhci {
-  RU=$(ls /mnt/RHCI*/rht-usb*)
-  echo -e "\033[36mINFO\t--RU:\t${RU}\033[0m"
   SP1=$(ls -d /mnt/RHCI*)
   icrm help &>/dev/null
   sed -i "/repository/s|:.*|: ${SP1}|" ~/.icrm/config.yml
