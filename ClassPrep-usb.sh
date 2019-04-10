@@ -88,8 +88,8 @@ function netdisk {
 }
 
 function rhtu {
-  pad ". rht-usb "
   RU=$(ls /mnt/RHCI*/rht-usb*)
+  pad ". rht-usb "
   if [ ! -z "${RU}" ]; then
     print_SUCCESS
   else
@@ -99,7 +99,7 @@ function rhtu {
 }
 
 function selectcn {
-  CNP=$(ls -d /mnt/[CDR]* | awk -F / '{print $NF}' | awk -F - '{print $1"-"$2}')
+  CNP=$(ls -d /mnt/[CDR]* | awk -F / '{print $NF}' | awk -F - '{print $1"-"$2}' | grep -v RHCI)
   echo
   echo -e '\033[36mPlease input the first number:\033[0m'
   select CN in $CNP EXIT
