@@ -66,18 +66,27 @@ function netdisk {
   if findmnt /mnt >/dev/null; then
     umount /mnt 2>/dev/null
   fi
+  
   pad ". network state"
   if ! ping -c 1 ${SI} &>/dev/null; then
     print_FAIL
+  else
+    print_SUCCESS
   fi
+  
   pad ". mounting //$SI/$SS /mnt"
   mount -o username=$UN,password=$UP,nounix,sec=ntlmssp,noserverino,vers=2.0 //$SI/$SS /mnt
   if findmnt /mnt &>/dev/null; then
     print_SUCCESS
+  else
+    print_FAIL
   fi
+  
   RU=$(ls /mnt/RHCI*/rht-usb*)
   if [ ! -z "${RU}" ]; then
     print_SUCCESS
+  else
+    print_FAIL
   fi
 }
 
@@ -96,15 +105,16 @@ function selectcn {
 function ufdisk {
   pad ". Disk confirm"
   if ! lsblk -S | awk '/usb/ {print $1}'; then
-    UD=$(lsblk -S | awk '/usb/ {print $1}')
+     print_SUCCESS
+     UD=$(lsblk -S | awk '/usb/ {print $1}')
   elif [ $(lsblk -S | awk '/disk/ {print $1}' | wc -l) -ge 2 ]; then
-    UD=$(lsblk -S | awk '/disk/ {print $1}' | grep -v sda)
+     print_SUCCESS
+     UD=$(lsblk -S | awk '/disk/ {print $1}' | grep -v sda)
   else
     print_FAIL
     echo -e "\033[36mINFO\tPlease insert Usb disk or Second disk\033[0m"
     exit 2
   fi
-  print_SUCCESS
   
   # umount /tmp/usb
   for i in {1..4}; do
@@ -113,10 +123,12 @@ function ufdisk {
     fi
   done
   
-  pad ". fdisk"
+  pad ". fdisk /dev/${UD}"
   echo -e "d\nd\nd\nd\n\nn\n\n\n\n\nw\n" | fdisk /dev/${UD} >/dev/null
   if [ -e /dev/${UD}1 ]; then
     print_SUCCESS
+  else
+    print_FAIL
   fi
 }
 
