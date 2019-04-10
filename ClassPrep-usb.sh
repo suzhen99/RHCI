@@ -109,9 +109,9 @@ function env_clear {
 }
 
 # Main area
+ufdisk
 netdisk
 selectcn
-ufdisk
 uformat
 rhci
 course
