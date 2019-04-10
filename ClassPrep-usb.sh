@@ -15,17 +15,70 @@
 #   * Mon Apr 1 2019 Alex Su <suzhen@easthome.com>
 #   - initial code
 
+LOG_FACILITY=local0
+LOG_PRIORITY=info
+LOG_TAG="${0##*/}"
+DEBUG=true
+LOGGER='/usr/bin/logger'
+
+function log {
+  if [[ ${#1} -gt 0 ]] ; then
+    $LOGGER -p ${LOG_FACILITY}.${LOG_PRIORITY} -t $LOG_TAG -- "$1"
+  else
+    while read data ; do
+        $LOGGER -p ${LOG_FACILITY}.${LOG_PRIORITY} -t $LOG_TAG -- "$1" "$data"
+    done
+  fi
+}
+
+function debug {
+  if [[ ${#1} -gt 0 ]] ; then
+    msg="$1"
+    if [[ "$DEBUG" = "true" ]] ; then
+        echo "$msg"
+    fi  
+    log "$msg"
+  else
+    while read data ; do
+        if [[ "$DEBUG" = "true" ]] ; then
+            echo "$data"
+        fi
+        log "$data"
+    done
+  fi
+}
+
+function pad {
+  local text="$1"
+  local dots='...............................................................'
+  printf '%s%s  ' "${text}" "${dots:${#text}}"
+}
+
+function print_SUCCESS() {
+  echo -e '\033[1;36mSUCCESS\033[0;39m'
+}
+
+function print_FAIL() {
+  echo -e "\\033[1;31mFAIL\\033[0;39m"
+}
 
 function netdisk {
   if findmnt /mnt >/dev/null; then
     umount /mnt 2>/dev/null
   fi
-  # network state
-  ping -c 1 ${SI} &>/dev/null || echo "INFO\tnetwork is disconnect"
-  mount -o username=$UN,password=$UP,nounix,sec=ntlmssp,noserverino,vers=2.0 //$SI/$SS /mnt \
-  && echo -e "mounted sucessfully\033[0m"
+  pad ". network state"
+  if ! ping -c 1 ${SI} &>/dev/null; then
+    print_FAIL
+  fi
+  pad ". mounting //$SI/$SS /mnt"
+  mount -o username=$UN,password=$UP,nounix,sec=ntlmssp,noserverino,vers=2.0 //$SI/$SS /mnt
+  if findmnt /mnt &>/dev/null; then
+    print_SUCCESS
+  fi
   RU=$(ls /mnt/RHCI*/rht-usb*)
-  echo -e "\033[36mINFO\t--RU:\t${RU}\033[0m"
+  if [ ! -z "${RU}" ]; then
+    print_SUCCESS
+  fi
 }
 
 function selectcn {
@@ -41,6 +94,7 @@ function selectcn {
 }
 
 function ufdisk {
+  pad ". Disk confirm"
   if ! lsblk -S | awk '/usb/ {print $1}'; then
     echo -e "\033[36mINFO\tUsb disk\033[0m"
     UD=$(lsblk -S | awk '/usb/ {print $1}')
@@ -48,19 +102,23 @@ function ufdisk {
     echo -e "\033[36mINFO\tSecond disk\033[0m"
     UD=$(lsblk -S | awk '/disk/ {print $1}' | grep -v sda)
   else
+    print_FAIL
     echo -e "\033[36mINFO\tPlease insert Usb disk or Second disk\033[0m"
     exit 2
   fi
+  print_SUCCESS
+  
   # umount /tmp/usb
   for i in {1..4}; do
     if lsblk | grep ${UD}{i}.*part.*\ /tmp; then
       umount /dev/${UD}{i}
     fi
   done
-  # fdisk
+  
+  pad ". fdisk"
   echo -e "d\nd\nd\nd\n\nn\n\n\n\n\nw\n" | fdisk /dev/${UD} >/dev/null
   if [ -e /dev/${UD}1 ]; then
-    echo -e "\033[36mINFO\t--UD:\t/dev/${UD}1\033[0m"
+    print_SUCCESS
   fi
 }
 
