@@ -10,7 +10,8 @@ sudo python get-pip.py
 # Install follow three using PIP
 sudo pip install pyyaml==3.11
 sudo pip install pyreadline==2.0
-sudo pip install requests==2.3.0
+sudo pip install requests
+sudo pip install lxml
 
 # Extract icrm
 wget https://github.com/suzhen99/RHCI/raw/master/icrm-1.0.7-2.el7.noarch.rpm
