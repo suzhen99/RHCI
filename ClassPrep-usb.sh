@@ -63,7 +63,7 @@ function print_FAIL() {
 }
 
 function nets {
-  pad ". network state"
+  pad ". network state "
   if ping -c 1 ${SI} &>/dev/null; then
     print_SUCCESS
   else
@@ -77,7 +77,7 @@ function netdisk {
     umount /mnt 2>/dev/null
   fi
   
-  pad ". mounting //$SI/$SS /mnt"
+  pad ". mounting //$SI/$SS /mnt "
   mount -o username=$UN,password=$UP,nounix,sec=ntlmssp,noserverino,vers=2.0 //$SI/$SS /mnt
   if findmnt /mnt &>/dev/null; then
     print_SUCCESS
@@ -88,7 +88,7 @@ function netdisk {
 }
 
 function rhtu {
-  pad ". rht-usb"
+  pad ". rht-usb "
   RU=$(ls /mnt/RHCI*/rht-usb*)
   if [ ! -z "${RU}" ]; then
     print_SUCCESS
@@ -112,7 +112,7 @@ function selectcn {
 }
 
 function ufdisk {
-  pad ". Disk confirm"
+  pad ". confirm disk "
   if ! lsblk -S | awk '/usb/ {print $1}'; then
      print_SUCCESS
      UD=$(lsblk -S | awk '/usb/ {print $1}')
@@ -132,7 +132,7 @@ function ufdisk {
     fi
   done
   
-  pad ". fdisk /dev/${UD}"
+  pad ". fdisk /dev/${UD} "
   echo -e "d\nd\nd\nd\n\nn\n\n\n\n\nw\n" | fdisk /dev/${UD} >/dev/null
   if [ -e /dev/${UD}1 ]; then
     print_SUCCESS
