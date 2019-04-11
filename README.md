@@ -1,6 +1,13 @@
 ```bash
 FOLDER=RHCI
 
+function nets {
+  if ! ping -c 1 ${SI} &>/dev/null; then
+    echo -e "INFO\tPlease connect to INTERNET."
+    exit
+  fi
+}
+
 function git_install {
   if ! rpm -q git &>/dev/null; then
     yum -y install git &>/dev/null
