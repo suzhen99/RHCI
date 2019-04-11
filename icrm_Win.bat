@@ -31,4 +31,5 @@ echo --- > %USERPROFILE%\.icrm\config.yml
 echo repository: %Course_Dir%\%CNF% >> %USERPROFILE%\.icrm\config.yml
 
 ECHO Run icrm
+sed -i '/setterm/s/".*"/"echo."/' usr\lib\python2.7\site-packages\icrm\__init__.py
 python usr\lib\python2.7\site-packages\icrm\__init__.py search %Course_Name%
