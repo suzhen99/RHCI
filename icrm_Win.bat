@@ -3,8 +3,8 @@
 ECHO Please install Python2.7 and git
 SET Course_Name=CL210
 SET Course_Dir=D:\INSTRUCTOR
-SET PATH="%PATH%;%ProgramFiles%\Git\bin;%ProgramFiles%\7-Zip"
-SETX /m path "C:\Windows\system32;C:\Windows;C:\Windows\System32\Wbem;C:\Windows\System32\WindowsPowerShell\v1.0;%ProgramFiles%\Git\bin;%ProgramFiles%\7-Zip"
+SET PATH="%PATH%;%ProgramFiles%\Git\bin;%ProgramFiles%\Git\usr\bin;%ProgramFiles%\7-Zip"
+SETX /m path "C:\Windows\system32;C:\Windows;C:\Windows\System32\Wbem;C:\Windows\System32\WindowsPowerShell\v1.0;%ProgramFiles%\Git\bin;%ProgramFiles%\Git\usr\bin;%ProgramFiles%\7-Zip"
 
 ECHO Install follow three using PIP
 pip install pyyaml==3.11 -q
