@@ -133,7 +133,7 @@ function ufdisk {
   done
   
   pad ". fdisk /dev/${UD} "
-  echo -e "d\nd\nd\nd\n\nn\n\n\n\n\nw\n" | fdisk /dev/${UD} >/dev/null
+  echo -e "d\nd\nd\nd\n\nn\n\n\n\n\nw\n" | fdisk /dev/${UD} &>/dev/null
   if [ -e /dev/${UD}1 ]; then
     print_SUCCESS
   else
