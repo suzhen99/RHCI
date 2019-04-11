@@ -15,7 +15,7 @@ pip install lxml -q
 ECHO git icrm
 git init RHCI && cd RHCI
 git config core.sparsecheckout true
-echo 'icrm*' >> .git/info/sparse-checkout
+echo icrm*rpm >> .git/info/sparse-checkout
 git remote add origin https://github.com/suzhen99/RHCI.git
 git pull origin master
 
