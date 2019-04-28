@@ -40,6 +40,7 @@ function git_push {
 # Main area
 git_install
 git_clone
+ls
 git_push
 
 ```
